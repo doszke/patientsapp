@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="table.css"/>
+    <title>Dodaj klinikę</title>
+</head>
+<body>
+<div>
+    <div class="container">
+        <div class="header"><span style="margin: 4% auto">Dodaj klinikę</span></div>
+    </div>
+    <div class="container">
+        <form th:class="centered" th:action="@{/addclinic}" th:method="post" th:object="${newClinic}">
+            <p> Nazwa*
+                <label>
+                    <input class="text" th:type="text" th:field="*{name}"/>
+                </label>
+            </p>
+            <p> Adres*
+                <label>
+                    <input class="text" th:type="text" th:field="*{address}"/>
+                </label>
+            </p>
+            <div class="error" th:if="${error!=null}" th:text="${error}"></div>
+
+            <input th:type="hidden" th:field="*{id}" th:value="*{id}"/>
+            <input th:type="hidden" th:field="*{patients}" th:value="*{patients}"/>
+
+
+            <p><label>
+                <input class="sub" type="submit" />
+            </label></p>
+        </form>
+        <a href="/" class="centered"><button>Powrót</button></a>
+    </div>
+</div>
+
+</body>
+</html>

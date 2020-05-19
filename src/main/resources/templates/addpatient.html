@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="table.css"/>
+    <title>Dodaj pacjenta</title>
+</head>
+<body>
+<div class="wrapper">
+    <div class="container">
+
+        <div class="header">Dodaj pacjenta</div>
+    </div>
+    <div class="container">
+        <form th:action="@{/addpatient}" th:method="post" th:object="${newPatient}">
+            <input th:type="hidden" th:field="*{id}" th:value="*{id}"/>
+            <input th:type="hidden" th:field="*{clinics}" th:value="*{clinics}"/>
+            <p>PESEL*
+                <label>
+                    <input class="text" type="text" th:field="*{pesel}"/>
+                </label>
+            </p>
+            <p>Imię*
+                <label>
+                    <input class="text" type="text" th:field="*{name}"/>
+                </label>
+            </p>
+            <p>Nazwisko*
+                <label>
+                    <input class="text" type="text" th:field="*{surname}"/>
+                </label>
+            </p>
+            <p>Historia medyczna pacjenta
+                <label>
+                    <textarea class="text" th:field="*{medicalHistory}"></textarea>
+                </label>
+            </p>
+            <div class="error" th:if="${error!=null}" th:text="${error}"></div>
+            <p>
+            <label>
+                <input th:class="sub" th:type="submit"/>
+            </label>
+            </p>
+        </form>
+        <a href="/" class="centered"><button>Powrót</button></a>
+    </div>
+</div>
+</body>
+</html>

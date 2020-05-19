@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="table.css"/>
+    <title>Pacjenci</title>
+</head>
+<body>
+<div>
+    <div class="container">
+        <div class="header"><span>Pacjenci</span></div>
+    </div>
+    <div class="container">
+        <div class="scroll_wrapper">
+            <table>
+                <thead>
+                <tr>
+                    <th th:class="small-size">Id</th>
+                    <th th:class="small-size">PESEL</th>
+                    <th th:class="small-size">Imię</th>
+                    <th th:class="small-size">Nazwisko</th>
+                    <th th:class="medium-size">Kliniki</th>
+                    <th th:class="large-size">Historia medyczna</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="key:${data.keySet()}">
+                    <td th:class="small-size" th:text="${key[0]}"></td>
+                    <td th:class="small-size" th:text="${key[1]}"></td>
+                    <td th:class="small-size" th:text="${key[2]}"></td>
+                    <td th:class="small-size" th:text="${key[3]}"></td>
+                    <td th:class="medium-size">
+                        <ul th:each="clinic:${data.get(key)}">
+                            <li th:text="${clinic}"></li>
+                        </ul>
+                    </td>
+                    <td th:text="${key[4]}" th:class="large-size"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="centered">
+        <div class="wrapper">
+            <a href="/">
+                <button th:text="Powrót"></button>
+            </a>
+            <a href="/download.json" download>
+                <button>Zapisz do pliku .json</button>
+            </a>
+        </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

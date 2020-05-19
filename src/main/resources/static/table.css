@@ -1,0 +1,192 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.9rem;
+    background: #ebe8be;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    width: 100%;
+}
+
+body div {
+    background: transparent;
+    padding: 2%;
+}
+
+table {
+    border-collapse: separate;
+}
+
+table thead {
+    background-color: #546e7a;
+}
+
+
+div.scroll_wrapper {
+    padding: 0;
+    margin: 0;
+    display: block;
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 350px;
+}
+
+
+div.scroll_wrapper th {
+    position: sticky;
+    top: 0;
+}
+
+table tbody {
+    width: 916px;
+    height: 140px;
+}
+
+
+table tbody tr:nth-child(odd) {
+    background-color: #c1d293;
+}
+
+table tbody tr:nth-child(even) {
+    background-color: #ebe8be;
+}
+
+.small-size {
+    width: calc(100% / 14 * 2);
+}
+
+/*clinics*/
+.medium-size {
+    width: calc(100% / 14 * 3);
+    text-align: left;
+}
+
+th.medium-size {
+    text-align: center;
+}
+
+
+div.x-large-size {
+    width: 60%;
+}
+
+th.large-size {
+    text-align: center;
+}
+
+table thead th {
+    background: #202e24;
+    color: #fff;
+}
+
+table td, th {
+    padding: 10px;
+    text-align: center;
+}
+
+div.header {
+    font-size: 2rem;
+    display: flex;
+    flex-direction: column; align-items: center;
+    color: #202e24;
+    padding: 0;
+}
+
+div.container {
+    background: #b3c87a;
+    margin: 2%;
+    padding: 2% 4%;
+}
+
+button, form input.sub {
+    padding: 12px;
+    border-color: transparent;
+    background: #202e24;
+    text-decoration: none;
+    color: #fff;
+}
+
+button:hover, form input.sub:hover {
+    font-weight: bold;
+}
+
+button:active, form input.sub:active {
+    text-decoration: underline;
+    font-weight: bold;
+
+}
+
+input.text {
+    border: 0;
+    outline: 0;
+    border-bottom: 2px solid #202e24;
+    color: black;
+    background-color: transparent;
+    font-size: 1.4rem;
+    margin: 4%;
+    width: 92%;
+}
+
+form textarea {
+    outline: 0;
+    border: 2px solid #202e24;
+    color: black;
+    background-color: transparent;
+    font-size: 1.4rem;
+    margin: 4%;
+    width: 92%;
+    height: 15%;
+}
+
+form * {
+    padding: 5px;
+}
+
+form p {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+form div {
+    display: table;
+    margin: 0 auto;
+}
+
+.error {
+    color: red;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.centered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 2% auto 0 auto;
+    padding: 0;
+}
+
+div.wrapper {
+    margin: 0;
+    padding: 0;
+    display: table-row;
+}
+
+button.fixed {
+    width: 250px
+}
+
+button.small-fixed {
+    width: 150px;
+}
+
+div a {
+    text-decoration: none;
+}
+

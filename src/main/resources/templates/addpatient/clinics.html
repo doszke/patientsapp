@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="table.css"/>
+    <title>Select clinics</title>
+</head>
+<body>
+<div>
+    <div class="container">
+        <div class="header">
+            <span>Wybierz kliniki</span>
+        </div>
+    </div>
+    <div class="container">
+        <form th:action="@{/addpatient/clinics}" th:object="${checkList}" th:method="post">
+            <input th:type="hidden" th:field="*{list}" th:value="*{list}"/>
+            <table>
+                <thead>
+                <tr>
+                    <th>id</th>
+                    <th>name</th>
+                    <th>address</th>
+                    <th>select</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="i : ${#numbers.sequence(0, __${#lists.size(clinics) - 1}__, 1)}">
+                    <td th:text="${clinics[i][0]}"></td>
+                    <td th:text="${clinics[i][1]}"></td>
+                    <td th:text="${clinics[i][2]}"></td>
+                    <td><label>
+                        <input th:type="checkbox" th:field="*{list[__${i}__]}" th:value="${clinics[i][0]}"/>
+                    </label></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <p><label>
+                <input th:class="sub" th:type="submit"/>
+            </label></p>
+        </form>
+    </div>
+</div>
+</body>
+</html>
