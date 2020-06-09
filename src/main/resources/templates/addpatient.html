@@ -35,7 +35,8 @@
                     <textarea class="text" th:field="*{medicalHistory}"></textarea>
                 </label>
             </p>
-            <div class="error" th:if="${error!=null}" th:text="${error}"></div>
+            <div th:if="${#request.getParameter('msg')!=null}" th:text="${#request.getParameter('msg')}"></div>
+            <div th:if="${msg!=null}" th:text="${msg}"></div>
             <p>
             <label>
                 <input th:class="sub" th:type="submit"/>

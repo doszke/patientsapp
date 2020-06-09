@@ -11,7 +11,7 @@
         <div class="header"><span style="margin: 4% auto">Dodaj klinikę</span></div>
     </div>
     <div class="container">
-        <form th:class="centered" th:action="@{/addclinic}" th:method="post" th:object="${newClinic}">
+        <form th:class="centered" th:action="@{/addclinics}" th:method="post" th:object="${newClinic}">
             <p> Nazwa*
                 <label>
                     <input class="text" th:type="text" th:field="*{name}"/>
@@ -22,9 +22,7 @@
                     <input class="text" th:type="text" th:field="*{address}"/>
                 </label>
             </p>
-            <div th:if="${msg!=null}" th:text="${msg}"></div>
-            <div th:if="${#request.getParameter('msg')!=null}" th:text="${#request.getParameter('msg')}"></div>
-
+            <div class="error" th:if="${error!=null}" th:text="${error}"></div>
 
             <input th:type="hidden" th:field="*{id}" th:value="*{id}"/>
             <input th:type="hidden" th:field="*{patients}" th:value="*{patients}"/>
@@ -34,7 +32,6 @@
                 <input class="sub" type="submit" />
             </label></p>
         </form>
-        <a href="/" class="centered"><button>Powrót</button></a>
     </div>
 </div>
 

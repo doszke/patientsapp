@@ -2,7 +2,6 @@ package com.doszke.patientsapp
 
 import com.doszke.patientsapp.model.Clinic
 import com.doszke.patientsapp.model.Patient
-import com.doszke.patientsapp.service.PersistenceService
 import org.hamcrest.Matchers.containsString
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

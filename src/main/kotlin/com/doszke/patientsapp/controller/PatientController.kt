@@ -4,17 +4,18 @@ import com.doszke.patientsapp.model.Clinic
 import com.doszke.patientsapp.model.MultipleClinicFormModel
 import com.doszke.patientsapp.model.Patient
 import com.doszke.patientsapp.service.PersistenceService
+import org.springframework.lang.Nullable
 import org.springframework.stereotype.Controller
 import org.springframework.ui.ModelMap
 import org.springframework.util.FileCopyUtils
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.ModelAttribute
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.SessionAttributes
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
+import org.springframework.web.servlet.mvc.support.RedirectAttributes
 import org.springframework.web.servlet.view.RedirectView
 import java.io.FileInputStream
 import javax.servlet.http.HttpServletResponse
+import javax.transaction.Transactional
+
 
 /**
  * Main application controller. It has one session attribute: newPatient: Patient, which is an object used for data fetch from form.
@@ -38,7 +39,22 @@ class PatientController(private val persistenceService: PersistenceService) {
      * @return 'addpatient' template
      */
     @GetMapping("/addpatient")
-    fun loadAddPatient(model: ModelMap): String{
+    fun loadBasicAddPatient(model: ModelMap) : String {
+        return this.loadAddPatient(null, model)
+    }
+
+    /**
+     * Addpatient GET mapping method.
+     * @param model model map instance
+     * @param msg message sent to the front
+     * @return 'addpatient' template
+     */
+    @GetMapping("/addpatient?msg={msg}")
+    fun loadAddPatient(@Nullable @PathVariable("msg") msg: String?, model: ModelMap): String {
+        model["msg"] = msg
+        if (model.keys.contains("newPatient")) {
+            return "addpatient"
+        }
         model["newPatient"] = Patient()
         return "addpatient"
     }
@@ -49,7 +65,18 @@ class PatientController(private val persistenceService: PersistenceService) {
      * @return 'addclinic' template
      */
     @GetMapping("/addclinic")
-    fun loadAddClinic(model: ModelMap): String{
+    fun loadBasicAddClinic(model: ModelMap): String {
+        return loadAddClinic(null, model)
+    }
+
+    /**
+     * Addclinic GET mapping method.
+     * @param model model map instance
+     * @param msg message sent to the front
+     * @return 'addclinic' template
+     */
+    @GetMapping("/addclinic?msg={msg}")
+    fun loadAddClinic(@PathVariable("msg") msg: String?, model: ModelMap): String{
         model["newClinic"] = Clinic()
         return "addclinic"
     }
@@ -62,18 +89,18 @@ class PatientController(private val persistenceService: PersistenceService) {
      * @return 'addpatient/clinics' template on success, 'addpatient' template on failure.
      */
     @PostMapping("/addpatient")
-    fun formAddPatientFirstStep(@ModelAttribute("newPatient") newPatient: Patient, model: ModelMap): String{
+    fun formAddPatientFirstStep(@ModelAttribute("newPatient") newPatient: Patient, model: ModelMap): ModelAndView{
         //newPatient is a session attribute - it is stored between requests, allowing to create this object
         //in multiple steps involving multiple forms
         if (newPatient.pesel == "" || newPatient.name == "" || newPatient.surname == "") {
-            model["error"] = "Pola oznaczone gwiazdką muszą zostać wypełnione! "
-            return "addpatient"
+            model["msg"] = "Pola oznaczone gwiazdką muszą zostać wypełnione! "
+            return ModelAndView("addpatient")
         }
         val clinicData = persistenceService.getAllClinics()
         model["clinics"] = clinicData
         val checkList = MultipleClinicFormModel(mutableListOf())
         model["checkList"] = checkList //this object will allow multiple clinics to be selected in the form
-        return "addpatient/clinics"
+        return ModelAndView("/addpatient/clinics")
     }
 
     /**
@@ -81,16 +108,52 @@ class PatientController(private val persistenceService: PersistenceService) {
      * new instance has been serialized, or does not redirect in case of any error.
      * @param newClinic object containing passed by the user data about new clinic
      * @param model model map instance
+     * @param attrs redirect attributes
      * @return ModelAndView object
      */
+    @Transactional
     @PostMapping("/addclinic")
-    fun formAddClinic(@ModelAttribute("newClinic") newClinic: Clinic, model: ModelMap): ModelAndView {
+    fun formAddClinic(@ModelAttribute("newClinic") newClinic: Clinic, model: ModelMap, attrs: RedirectAttributes): ModelAndView {
         if (newClinic.name == "" || newClinic.address == "") {
-            model["error"] = "Pola oznaczone gwiazdką muszą zostać wypełnione!"
+            model["msg"] = "Pola oznaczone gwiazdką muszą zostać wypełnione!"
             return ModelAndView("/addclinic")
         }
         persistenceService.saveClinic(newClinic)
+        attrs.addAttribute("msg", "Dodano klinikę")
         return ModelAndView(RedirectView("/addclinic")) //will refresh
+    }
+
+    /**
+     * Addclinics GET mapping method.
+     * @param model model map instance
+     * @return 'addclinics' template
+     */
+    @GetMapping("/addclinics")
+    fun loadAddClinics(model: ModelMap) : String{
+        model["newClinic"] = Clinic()
+        return "/addclinics"
+    }
+
+    /**
+     * Addclinics POST mapping method. It is used for creation of Clinic instances. It redirects to the 'addpateint/clinics' page if
+     * new instance has been serialized, or does not redirect in case of any error.
+     * @param newClinic object containing passed by the user data about new clinic
+     * @param model model map instance
+     * @return ModelAndView object
+     */
+    @Transactional
+    @PostMapping("/addclinics")
+    fun formAddClinicFromPateints(@ModelAttribute("newClinic") newClinic: Clinic, model: ModelMap): String {
+        if (newClinic.name == "" || newClinic.address == "") {
+            model["msg"] = "Pola oznaczone gwiazdką muszą zostać wypełnione!"
+            return "/addclinic"
+        }
+        persistenceService.saveClinic(newClinic)
+        val clinicData = persistenceService.getAllClinics()
+        model["clinics"] = clinicData
+        val checkList = MultipleClinicFormModel(mutableListOf())
+        model["checkList"] = checkList //this object will allow multiple clinics to be selected in the form
+        return "/addpatient/clinics" //will refresh
     }
 
     /**
@@ -99,15 +162,18 @@ class PatientController(private val persistenceService: PersistenceService) {
      * @param newPatient session attribute storing information about new patient
      * @return a RedirectView instance, which redirects to 'addpatient' template
      */
+    @Transactional
     @PostMapping("/addpatient/clinics")
     fun persistPatient(
             @ModelAttribute("checkList") checkList: MultipleClinicFormModel,
             @ModelAttribute("newPatient") newPatient: Patient, //this is a session attribute - stored between requests
-            model: ModelMap
-    ): RedirectView {
+            model: ModelMap,
+            attrs: RedirectAttributes
+    ) : RedirectView {
         val ids = checkList.list.filterNotNull().map { it.toLong() }.toTypedArray()
         persistenceService.savePatient(newPatient, ids)
         model["newPatient"] = Patient()
+        attrs.addAttribute("msg", "Dodano pacjenta")
         return RedirectView("/addpatient")
     }
 

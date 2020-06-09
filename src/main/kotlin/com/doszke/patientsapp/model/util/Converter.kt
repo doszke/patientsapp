@@ -1,5 +1,6 @@
 package com.doszke.patientsapp.model.util
 
+import com.doszke.patientsapp.model.AnonymizedPatient
 import com.doszke.patientsapp.model.Patient
 
 /**
@@ -14,7 +15,7 @@ class Converter {
          * @param patients list of Patient instances
          * @return list of arrays of String objects
          */
-        fun convertPatients(patients: List<Patient>): Map<Array<String>, List<String>> {
+        fun convertPatientsForFront(patients: List<Patient>): Map<Array<String>, List<String>> {
             val output = mutableMapOf<Array<String>, List<String>>()
             patients.forEach {
                 val key = it.toStringArray()
@@ -22,6 +23,15 @@ class Converter {
                 output[key] = value
             }
             return output
+        }
+
+        /**
+         * Method used for converting a list of Patient instances into a list of AnonymizedPatient objects.
+         * @param patients list of Patient instances
+         * @return list of AnonymizedPatient objects
+         */
+        fun convertPatientsToAnonymized(patients: List<Patient>) : List<AnonymizedPatient> {
+            return patients.map { it.toAnonymizedPatient() }.toList()
         }
 
     }

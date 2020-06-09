@@ -69,21 +69,23 @@ class PersistenceService(
      */
     fun getAllPatients(): Map<Array<String>, List<String>> { //keys are info about patient, values are lists of info about patients' clinics
         val patients = patientRepository.findAll().toList()
-        return Converter.convertPatients(patients)
+        return Converter.convertPatientsForFront(patients)
     }
 
     /**
-     * Method used for creating a JSON file containing all patients and corresponding to them clinics.
+     * Method used for creating a JSON file containing all anonymized patients and corresponding to them clinics.
      * @return JSON file
      */
     fun dropPatientsToJson(): File {
         val patients = patientRepository.findAll().toList()
-        val jsoned = Gson().toJson(patients)
+        val anonymized = Converter.convertPatientsToAnonymized(patients)
+        val jsoned = Gson().toJson(anonymized)
         val file = File("download.json")
         val f = FileWriter(file)
         f.write(jsoned)
         f.close()
         return file
     }
+
 
 }

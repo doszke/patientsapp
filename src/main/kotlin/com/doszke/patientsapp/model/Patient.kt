@@ -1,5 +1,6 @@
 package com.doszke.patientsapp.model
 
+import java.time.LocalDate
 import javax.persistence.*
 
 /**
@@ -33,6 +34,14 @@ data class Patient(
     constructor(): this(0L, "", "", "", setOf<Clinic>(), "")
 
     /**
+     * Method used for converting this instance into an AnonymizedPatient instance.
+     * @return an AnonymizedPatient created from this Patient instance
+     */
+    fun toAnonymizedPatient(): AnonymizedPatient {
+        return AnonymizedPatient(this.hashCode(), clinics, medicalHistory)
+    }
+
+    /**
      * Method used for mapping the object into an array of String objects, containing information about the instance.
      * @return String array
      */
@@ -58,5 +67,19 @@ data class Patient(
         return result
     }
 
-
 }
+
+/**
+ * Class used for storing anonymized data about patients.
+ *
+ * @property id fake id
+ * @property clinics set of Clinic instances, mapped many-to-many with Clinic entity.
+ * @property medicalHistory medical history of the patient
+ *
+ * @constructor primary constructor
+ */
+data class AnonymizedPatient(
+        var id: Int, //hashcode
+        var clinics: Set<Clinic>,
+        var medicalHistory: String
+)

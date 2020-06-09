@@ -15,31 +15,42 @@
     <div class="container">
         <form th:action="@{/addpatient/clinics}" th:object="${checkList}" th:method="post">
             <input th:type="hidden" th:field="*{list}" th:value="*{list}"/>
-            <table>
-                <thead>
-                <tr>
-                    <th>id</th>
-                    <th>name</th>
-                    <th>address</th>
-                    <th>select</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="i : ${#numbers.sequence(0, __${#lists.size(clinics) - 1}__, 1)}">
-                    <td th:text="${clinics[i][0]}"></td>
-                    <td th:text="${clinics[i][1]}"></td>
-                    <td th:text="${clinics[i][2]}"></td>
-                    <td><label>
-                        <input th:type="checkbox" th:field="*{list[__${i}__]}" th:value="${clinics[i][0]}"/>
-                    </label></td>
-                </tr>
-                </tbody>
-            </table>
-
+            <div class="scroll_wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>name</th>
+                        <th>address</th>
+                        <th>select</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="i : ${#numbers.sequence(0, __${#lists.size(clinics) - 1}__, 1)}">
+                        <td th:text="${clinics[i][0]}"></td>
+                        <td th:text="${clinics[i][1]}"></td>
+                        <td th:text="${clinics[i][2]}"></td>
+                        <td><label>
+                            <input th:type="checkbox" th:field="*{list[__${i}__]}" th:value="${clinics[i][0]}"/>
+                        </label></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
             <p><label>
                 <input th:class="sub" th:type="submit"/>
             </label></p>
         </form>
+        <a href="/addclinics" class="centered">
+            <button>
+                Dodaj nową klinikę
+            </button>
+        </a>
+        <a href="/addpatient" class="centered">
+            <button>
+                Powrót
+            </button>
+        </a>
     </div>
 </div>
 </body>
